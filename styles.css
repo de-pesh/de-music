@@ -45,3 +45,24 @@ a{color:inherit;text-decoration:none}button,input{font:inherit}button{color:inhe
 #search-button span{display:inline-block}
 @media(max-width:700px){.player-main{grid-template-columns:minmax(0,1fr) auto;gap:10px 12px}.player-status{display:none}.player-art{width:42px;height:42px;flex-basis:42px}.player-track-copy strong{font-size:11px}.player-track-copy small{font-size:9px}.player-controls{gap:9px}.player-skip{width:28px}.player-play{width:39px;height:39px}.player-dock{padding-left:15px;padding-right:15px}.app-shell{padding-bottom:176px}}
 @media(max-width:520px){.experimental-pill{font-size:7px;letter-spacing:.4px;padding:8px 9px;gap:5px}.player-dock{padding-top:9px;padding-bottom:calc(9px + env(safe-area-inset-bottom))}.player-main{gap:8px}.player-current{gap:9px}.player-art{width:38px;height:38px;flex-basis:38px}.player-track-copy strong{max-width:44vw;font-size:10px}.player-track-copy small{max-width:44vw;font-size:8px}.player-controls{gap:5px}.player-skip{font-size:15px;width:24px}.player-play{width:36px;height:36px;font-size:15px}.player-seek-row{grid-template-columns:32px minmax(0,1fr) 32px;gap:7px;margin-top:7px}.player-time{font-size:8px}.app-shell{padding-bottom:160px}}
+
+/* Manual YouTube Music URL fallback */
+.manual-fallback{max-width:650px;margin:15px 0 0;border:1px solid rgba(255,255,255,.11);border-radius:14px;background:rgba(18,18,22,.72);overflow:hidden}
+.manual-fallback summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 15px;cursor:pointer;list-style:none;font-size:11px;font-weight:800}
+.manual-fallback summary::-webkit-details-marker{display:none}
+.manual-fallback summary:after{content:"＋";font-size:16px;color:var(--lime);font-weight:500}
+.manual-fallback[open] summary:after{content:"−"}
+.manual-summary-tag{margin-left:auto;color:#8d8c95;font-family:"DM Mono",monospace;font-size:8px;letter-spacing:.8px;font-weight:400}
+.manual-fallback-body{padding:0 15px 15px}
+.manual-fallback-body>p{margin:0 0 11px;color:#96959d;font-size:10px;line-height:1.7}
+.manual-fallback-body input{display:block;width:100%;min-width:0;padding:12px 13px;border:1px solid rgba(255,255,255,.13);border-radius:10px;background:#0d0d10;color:var(--text);font-size:11px;outline:none}
+.manual-fallback-body input:focus{border-color:rgba(213,255,120,.65)}
+.manual-fallback-body input::placeholder{color:#66656e}
+.manual-fallback-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:9px}
+.manual-fallback-actions button{border:1px solid transparent;border-radius:9px;padding:10px 12px;cursor:pointer;font-size:10px;font-weight:800}
+#manual-play-button{background:var(--lime);color:#10110b}
+.manual-fallback-actions .manual-secondary{background:#1d1d22;border-color:var(--line);color:#d4d3d9}
+.manual-fallback-actions button:hover{filter:brightness(1.08)}
+.manual-fallback-body .manual-note{margin:11px 0 0;color:#777680;font-size:9px}
+.manual-fallback summary:focus-visible,.manual-fallback button:focus-visible,.manual-fallback input:focus-visible{outline:2px solid var(--lime);outline-offset:3px}
+@media(max-width:520px){.manual-fallback summary{padding:12px;font-size:10px}.manual-summary-tag{font-size:7px}.manual-fallback-body{padding:0 12px 12px}.manual-fallback-actions{display:grid;grid-template-columns:1fr}.manual-fallback-actions button{width:100%;padding:12px}}

@@ -60,6 +60,12 @@ Replace the host with your Render service URL.
 - `https://YOUR-SERVICE.onrender.com/api/recommendations` — available home-feed rows.
 - `https://YOUR-SERVICE.onrender.com/api/stream/VIDEO_ID` — streams audio bytes for an 11-character video ID. Test playback from the site rather than typing this URL into the browser.
 
+## Manual YouTube Music URL fallback
+
+The page includes a collapsible manual fallback below the main search bar. If the `ytmusicapi` search or recommendation endpoints fail but the Render service and `/api/stream/{video_id}` endpoint are still reachable, open the YouTube Music search in a new tab, copy a single track URL, paste it, and choose **Play in this page**. It accepts YouTube Music/YouTube watch URLs and short links, extracts the video ID in the browser, and avoids depending on the search API to find metadata.
+
+If the entire Render API is unavailable, an ordinary YouTube Music page URL cannot be played by the browser's native `<audio>` element: it is not a direct audio-stream URL. In that case **Open pasted link** opens the official YouTube Music page. The manual fallback does not bypass stream resolution, nor does it guarantee playback.
+
 ## Use on iPhone
 
 1. Open your GitHub Pages HTTPS URL in Safari.

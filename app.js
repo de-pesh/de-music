@@ -8,6 +8,12 @@
   const input = document.getElementById("search-input");
   const searchButton = document.getElementById("search-button");
   const searchNote = document.getElementById("search-note");
+  const manualFallback = document.getElementById("manual-fallback");
+  const manualUrlInput = document.getElementById("manual-url-input");
+  const manualPlayButton = document.getElementById("manual-play-button");
+  const manualOpenButton = document.getElementById("manual-open-button");
+  const manualSearchButton = document.getElementById("manual-search-button");
+  const manualNote = document.getElementById("manual-note");
   const resultsSection = document.getElementById("results-section");
   const resultsTitle = document.getElementById("results-title");
   const resultsMeta = document.getElementById("results-meta");
@@ -64,6 +70,60 @@
     searchTracks(query);
   });
 
+  manualPlayButton.addEventListener("click", () => {
+    const parsed = parseYouTubeTrackUrl(manualUrlInput.value);
+    if (!parsed) {
+      showToast("Paste a valid YouTube Music or YouTube track URL first.");
+      manualUrlInput.focus();
+      return;
+    }
+    if (!apiBase) {
+      manualFallback.open = true;
+      showToast("The custom player needs the Render stream API. Use Open pasted link as the fallback.");
+      return;
+    }
+    const track = {
+      videoId: parsed.videoId,
+      title: `Manual track (${parsed.videoId})`,
+      artists: [],
+      album: null,
+      duration: null,
+      thumbnail: null,
+      url: parsed.url,
+      resultType: "manual-url"
+    };
+    manualNote.textContent = "Trying this URL through the custom player. If it fails, the stream endpoint may be unavailable or unable to resolve this video.";
+    startTrack(track, [track], 0);
+  });
+
+  manualOpenButton.addEventListener("click", () => {
+    const safeUrl = parseAllowedYouTubeUrl(manualUrlInput.value);
+    if (!safeUrl) {
+      showToast("Paste a valid YouTube Music or YouTube URL first.");
+      manualUrlInput.focus();
+      return;
+    }
+    window.open(safeUrl.href, "_blank", "noopener,noreferrer");
+  });
+
+  manualSearchButton.addEventListener("click", () => {
+    const query = input.value.trim();
+    if (!query) {
+      showToast("Enter a song or artist in the main search box first.");
+      input.focus();
+      return;
+    }
+    const searchUrl = `https://music.youtube.com/search?q=${encodeURIComponent(query)}`;
+    window.open(searchUrl, "_blank", "noopener,noreferrer");
+  });
+
+  manualUrlInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      manualPlayButton.click();
+    }
+  });
+
   document.querySelectorAll("[data-query]").forEach((button) => {
     button.addEventListener("click", () => {
       const query = button.getAttribute("data-query") || "";
@@ -108,7 +168,9 @@
     } catch (error) {
       resultsMeta.textContent = "Unavailable";
       resultsList.append(createMessage(`Could not fetch songs. ${error.message}`, true));
-      showToast("Search failed. Check your Render URL and service logs.");
+      manualFallback.open = true;
+      manualNote.textContent = "Search failed. Open YouTube Music in a new tab, copy a track's URL, then paste it above. Manual playback still requires the Render stream endpoint to be reachable.";
+      showToast("Search failed. Use the manual YouTube Music URL fallback below.");
     } finally {
       setSearching(false);
     }
@@ -373,7 +435,9 @@
     if (!currentTrack || sourceFailureShown) return;
     sourceFailureShown = true;
     setPlayerStatus("STREAM ERROR");
-    showToast("Stream failed. YouTube may have changed the format or blocked this request; check Render logs.");
+    manualFallback.open = true;
+    manualNote.textContent = "The stream attempt failed. You can retry with another URL, or open the pasted link in YouTube Music. If Render is down, the custom player cannot resolve the link by itself.";
+    showToast("Stream failed. Try the manual fallback or open the link in YouTube Music.");
   });
   seekbar.addEventListener("input", () => {
     if (Number.isFinite(audio.duration) && audio.duration > 0) {
@@ -400,6 +464,39 @@
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60).toString().padStart(2, "0");
     return `${mins}:${secs}`;
+  }
+
+  function parseAllowedYouTubeUrl(rawValue) {
+    try {
+      const url = new URL(String(rawValue || "").trim());
+      if (url.protocol !== "https:") return null;
+      const host = url.hostname.toLowerCase();
+      const allowedHosts = new Set([
+        "music.youtube.com", "youtube.com", "www.youtube.com", "m.youtube.com",
+        "youtu.be", "www.youtu.be"
+      ]);
+      return allowedHosts.has(host) ? url : null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  function parseYouTubeTrackUrl(rawValue) {
+    const url = parseAllowedYouTubeUrl(rawValue);
+    if (!url) return null;
+    const host = url.hostname.toLowerCase();
+    let videoId = "";
+    if (host === "youtu.be" || host === "www.youtu.be") {
+      videoId = url.pathname.split("/").filter(Boolean)[0] || "";
+    } else {
+      videoId = url.searchParams.get("v") || "";
+      if (!videoId) {
+        const match = url.pathname.match(/^\/(?:shorts|embed|live)\/([A-Za-z0-9_-]{11})(?:\/|$)/);
+        if (match) videoId = match[1];
+      }
+    }
+    if (!/^[A-Za-z0-9_-]{11}$/.test(videoId)) return null;
+    return { videoId, url: url.href };
   }
 
   function safeImageUrl(value) {

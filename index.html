@@ -34,6 +34,24 @@
           <button type="submit" id="search-button">Search <span aria-hidden="true">↗</span></button>
         </form>
         <p class="search-note" id="search-note">Tap a result to play it in this page. Configure your Render API URL to begin.</p>
+
+        <details class="manual-fallback" id="manual-fallback">
+          <summary>
+            <span>Have a YouTube Music link?</span>
+            <span class="manual-summary-tag">MANUAL FALLBACK</span>
+          </summary>
+          <div class="manual-fallback-body">
+            <p>If search or recommendations fail, find a track on YouTube Music, copy its link, and paste it here. “Play in this page” uses the stream endpoint directly, so it can bypass a broken search endpoint—but the Render stream API must still be online.</p>
+            <label class="sr-only" for="manual-url-input">YouTube Music track URL</label>
+            <input id="manual-url-input" type="url" inputmode="url" autocomplete="url" autocapitalize="off" spellcheck="false" placeholder="https://music.youtube.com/watch?v=…">
+            <div class="manual-fallback-actions">
+              <button id="manual-play-button" type="button">Play in this page <span aria-hidden="true">▶</span></button>
+              <button id="manual-open-button" type="button" class="manual-secondary">Open pasted link ↗</button>
+              <button id="manual-search-button" type="button" class="manual-secondary">Find on YouTube Music ↗</button>
+            </div>
+            <p class="manual-note" id="manual-note">A YouTube Music page URL is not an audio file. If the entire Render API is down, use “Open pasted link” to play through YouTube Music instead.</p>
+          </div>
+        </details>
       </section>
 
       <section class="quick-picks" aria-labelledby="moods-title">

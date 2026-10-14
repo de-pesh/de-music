@@ -2,3 +2,4 @@
 window.AFTERHOURS_CONFIG = {
   API_BASE_URL: "https://afterhours-ytmusic-api.onrender.com"
 };
+

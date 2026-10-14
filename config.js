@@ -1,10 +1,4 @@
-/*
- * GitHub Pages configuration.
- * Leave API_BASE_URL empty for static-only mode.
- * When the optional FastAPI service is deployed, enter its HTTPS origin here,
- * for example: https://your-ytmusic-api.onrender.com
- * Do not put API keys or private tokens in this public file.
- */
+/* Set API_BASE_URL to your existing Render service URL. Keep the final slash off. */
 window.AFTERHOURS_CONFIG = {
   API_BASE_URL: "https://afterhours-ytmusic-api.onrender.com"
 };

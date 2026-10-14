@@ -3,8 +3,8 @@ services:
     name: afterhours-ytmusic-api
     runtime: python
     rootDir: api
-    buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    buildCommand: pip install -r requirements.txt && curl -fsSL https://deno.land/install.sh | sh
+    startCommand: export PATH="$HOME/.deno/bin:$PATH" && uvicorn main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /api/health
     envVars:
       - key: ALLOWED_ORIGINS

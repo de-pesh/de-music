@@ -6,5 +6,5 @@
  * Do not put API keys or private tokens in this public file.
  */
 window.AFTERHOURS_CONFIG = {
-  API_BASE_URL: ""
+  API_BASE_URL: "https://afterhours-ytmusic-api.onrender.com"
 };
